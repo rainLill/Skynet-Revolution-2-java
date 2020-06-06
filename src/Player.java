@@ -1,3 +1,9 @@
+/*
+Solution for Skynet revolution episode 1 & 2
+https://www.codingame.com/ide/puzzle/skynet-revolution-episode-1
+https://www.codingame.com/ide/puzzle/skynet-revolution-episode-2
+ */
+
 import java.util.*;
 
 class Player {
