@@ -2,6 +2,11 @@
 Solution for Skynet revolution episode 1 & 2
 https://www.codingame.com/ide/puzzle/skynet-revolution-episode-1
 https://www.codingame.com/ide/puzzle/skynet-revolution-episode-2
+
+Improvement idea:
+Rework risklevel calculation. This is case if node has 1 connection to gateway, then getHighestRisk()
+will return highest risk or first node in HashMap with connection to gateway.
+--> removeRandomLink() will then not be needed and 1 looping through nodes will be saved.
  */
 
 import java.util.*;
