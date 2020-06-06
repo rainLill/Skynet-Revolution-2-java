@@ -7,30 +7,36 @@ class Player {
         int L = in.nextInt();
         int E = in.nextInt();
 
+//      Nodes and connections data
         GameData gd = new GameData(N);
 
+//        Recording all connections between nodes from the website
         for (int i = 0; i < L; i++) {
             gd.setConnections(in.nextInt(), in.nextInt());
         }
 
+//        Recording all gateways from the website
         for (int i = 0; i < E; i++) {
             gd.setIsGateway(in.nextInt());
         }
 
+//        Calculating risk level
         gd.calculateRisk();
 
+//        Creating game object for solving procedure and fowrding refrence to GameData
         Game game = new Game();
         game.setGd(gd);
 
+//        Game loop. while loop terminated by website
         while (true) {
             int SI = in.nextInt(); // The index of the node on which the Skynet agent is positioned this turn
             System.out.println(game.nextAnswer(SI));
         }
-
     }
 
     public static class GameData {
-        Integer nodeCount = 0;  //        isGateway: 0 - not gateway  , 1 - is gateway
+//        Count of nodes, including gateways
+        Integer nodeCount = 0;
 
         private Map<Integer, Map<String, ArrayList<Integer>>> nodeData = new HashMap<>();
 
@@ -44,31 +50,46 @@ class Player {
             }
         }
 
+        /*   Gateways status is held in ArrayList position 0
+             isGateway: 0 - not gateway  , 1 - is gateway
+         */
         public void setIsGateway(Integer currentNode) {
             nodeData.get(currentNode).get("isGateway").add(0, 1);
         }
 
+//        Returns if the node is gateway
         public Integer getIsGateway(Integer currentNode) {
             return nodeData.get(currentNode).get("isGateway").get(0);
         }
 
+//        Set riskLevel for node. Held in arraylist under positon 0
         public void setRiskLevel(Integer currentNode, Integer riskValue) {
             nodeData.get(currentNode).get("riskLevel").add(0, riskValue);
         }
 
+//        Returns node riskLevel
         public Integer getRiskLevel(Integer currentNode) {
             return nodeData.get(currentNode).get("riskLevel").get(0);
         }
-
+/*
+          Sets connnection between nodes. Connection has two point (N1 and N2)
+          So it is set, that N1 is connected to N2 and N2 is set to N1.
+          this means ,that we can check the connection from both ends of link.
+ */
         public void setConnections(Integer currentNode, Integer connectionNode) {
             nodeData.get(currentNode).get("connections").add(connectionNode);
             nodeData.get(connectionNode).get("connections").add(currentNode);
         }
 
+//        Returns ArrayList object with all connections.
         public ArrayList<Integer> getConnections(Integer currentNode) {
             return nodeData.get(currentNode).get("connections");
         }
 
+/*        Removes connection from both nodes. To remove connection N1 to N2 is removed
+          from node N1 from connections N2 and from N2 node connections list node N1.
+          For both nodes N1 and N2 risk level is set to 0.
+*/
         public void removeConnection(Integer currentNode, Integer removeNode) {
             setRiskLevel(currentNode, 0);
             setRiskLevel(removeNode, 0);
@@ -156,10 +177,12 @@ class Player {
 
 
             if (output.isEmpty()) {
+                System.err.println("removeHighestRisk()");
                 output = removeHighestRisk();
             }
 
             if (output.isEmpty()) {
+                System.err.println("removeRandomLink()");
                 output = removeRandomLink();
             }
 
